@@ -1,4 +1,6 @@
 import random
 
-while True:
-    print()
+print("test")
+
+"""while True:
+    print("test")"""
