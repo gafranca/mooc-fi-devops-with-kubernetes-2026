@@ -1,6 +1,5 @@
 import random
 
-print("test"+"Test 2")
-
-"""while True:
-    print("test")"""
+time_stamp = 
+string_4_characters = random.choices()
+string_8_characters =
