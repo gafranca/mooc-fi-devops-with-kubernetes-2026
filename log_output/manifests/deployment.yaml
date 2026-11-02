@@ -14,4 +14,4 @@ spec:
     spec:
       containers:
         - name: log-output
-          image: YOUR_DOCKERHUB_USER/log-output:1.0
+          image: gafranca/log-output:1.0
