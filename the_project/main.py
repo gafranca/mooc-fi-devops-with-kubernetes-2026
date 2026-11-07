@@ -2,12 +2,22 @@ import os
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 
 app = FastAPI(title="todo app")
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def read_root():
-    return {"app": "todo app"}
+    return """
+    <!DOCTYPE html>
+    <html>
+      <head><title>Todo app</title></head>
+      <body>
+        <h1>Todo app</h1>
+        <p>Nothing to do yet.</p>
+      </body>
+    </html>
+    """
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT") or 8000)
