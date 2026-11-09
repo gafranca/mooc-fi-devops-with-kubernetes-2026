@@ -6,3 +6,4 @@ Chapter 2:
 - [1.4](https://github.com/gafranca/mooc-fi-devops-with-kubernetes-2026/tree/1.4)
 - [1.5](https://github.com/gafranca/mooc-fi-devops-with-kubernetes-2026/tree/1.5)
 - [1.6](https://github.com/gafranca/mooc-fi-devops-with-kubernetes-2026/tree/1.6)
+- [1.7](https://github.com/gafranca/mooc-fi-devops-with-kubernetes-2026/tree/1.7)
