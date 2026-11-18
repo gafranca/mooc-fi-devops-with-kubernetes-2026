@@ -3,6 +3,7 @@ import os
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from fastapi import Response
 
 app = FastAPI(title="todo app")
 
@@ -18,6 +19,10 @@ def read_root():
       </body>
     </html>
     """
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    return Response(status_code=204)
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT") or 8000)
