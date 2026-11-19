@@ -6,3 +6,12 @@ spec:
   stripPrefix:
     prefixes:
       - /pingpong
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-todo
+spec:
+  stripPrefix:
+    prefixes:
+      - /todo
