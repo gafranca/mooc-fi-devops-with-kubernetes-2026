@@ -1,10 +1,11 @@
-import json
 import os
 import random
+import threading
 import time
 from datetime import datetime, timezone
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import urlparse
+
+import uvicorn
+from fastapi import FastAPI, Response
 
 HEX_CHARS = "0123456789abcdef"
 
@@ -17,44 +18,39 @@ def time_stamp():
     now = datetime.now(timezone.utc)
     return now.isoformat(timespec="milliseconds").replace("+00:00", "Z")
 
+random_string_8_characters = random_hex(8)
+random_string_4_characters_1 = random_hex(4)
+random_string_4_characters_2 = random_hex(4)
+random_string_4_characters_3 = random_hex(4)
+random_string_12_characters = random_hex(12)
+
 final_string = (
-    f"{random_hex(8)}-{random_hex(4)}-"
-    f"{random_hex(4)}-{random_hex(4)}-"
-    f"{random_hex(12)}"
+    f"{random_string_8_characters}-{random_string_4_characters_1}-"
+    f"{random_string_4_characters_2}-{random_string_4_characters_3}-"
+    f"{random_string_12_characters}"
 )
 
-class StatusHandler(BaseHTTPRequestHandler):
+app = FastAPI(title="log output")
 
-    def do_GET(self):
-        path = urlparse(self.path).path
 
-        if path not in ("/", "/status"):
-            self.send_error(404, "Not Found")
-            return
+@app.get("/")
+@app.get("/status")
+def status():
+    return {"timestamp": time_stamp(), "random_string": final_string}
 
-        status = {
-            "timestamp": time_stamp(),
-            "randomString": final_string
-        }
 
-        response = json.dumps(status).encode("utf-8")
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    return Response(status_code=204)
 
-        self.send_response(200)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(response)))
-        self.end_headers()
-        self.wfile.write(response)
 
-port = int(os.environ.get("PORT", 3000))
+def log_forever():
+    while True:
+        print(f"{time_stamp()}: {final_string}", flush=True)
+        time.sleep(5)
 
-server = ThreadingHTTPServer(("0.0.0.0", port), StatusHandler)
 
-print(f"HTTP server listening on port {port}", flush=True)
-
-import threading
-server_thread = threading.Thread(target=server.serve_forever, daemon=True)
-server_thread.start()
-
-while True:
-    print(f"{time_stamp()}: {final_string}", flush=True)
-    time.sleep(5)
+if __name__ == "__main__":
+    threading.Thread(target=log_forever, daemon=True).start()
+    port = int(os.getenv("PORT") or 3000)
+    uvicorn.run(app, host="0.0.0.0", port=port)
